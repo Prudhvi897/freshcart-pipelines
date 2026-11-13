@@ -1,0 +1,13 @@
+blocks:
+  - block_type: data_loader
+    block_name: load_iris
+    downstream_blocks: [prepare_data]
+  - block_type: transformer
+    block_name: prepare_data
+    downstream_blocks: [train_model]
+  - block_type: transformer
+    block_name: train_model
+    downstream_blocks: [save_results]
+  - block_type: data_exporter
+    block_name: save_results
+    downstream_blocks: []
