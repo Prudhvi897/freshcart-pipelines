@@ -1,9 +1,11 @@
 import json
+import logging
 import os
 import random
 import sys
 import time
 from typing import Any, Dict
+from urllib.parse import urlsplit, urlunsplit
 
 import pika
 
@@ -20,6 +22,8 @@ def build_payload(counter: int) -> Dict[str, Any]:
     city = random.choice(CITY_OPTIONS)
     zone = random.choice(ZONE_OPTIONS[city])
     msg_type = random.choice(TYPE_OPTIONS)
+    if counter % 10 == 0:
+        city = "bangalore"
     payload = {
         "id": f"ORD-{counter:04d}",
         "city": city,
@@ -27,17 +31,35 @@ def build_payload(counter: int) -> Dict[str, Any]:
         "type": msg_type,
         "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     }
+    if counter % 10 == 0:
+        payload.pop("zone")
     return payload
 
 
+def build_routing_key(payload: Dict[str, Any]) -> str:
+    return f"{payload.get('city', 'unknown')}.{payload.get('zone', 'unknown')}.{payload.get('type', 'unknown')}"
+
+
+def sanitize_url(url: str) -> str:
+    parts = urlsplit(url)
+    netloc = parts.hostname or "unknown-host"
+    if parts.port:
+        netloc = f"{netloc}:{parts.port}"
+    return urlunsplit((parts.scheme, netloc, "", "", ""))
+
+
 def main() -> None:
-    url = os.getenv("RABBITMQ_URL", "amqp://guest:guest@localhost:5672/")
-    print(f"Connecting to {url}")
+    url = os.getenv("RABBITMQ_URL", "amqp://localhost:5672/")
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
+    logging.info("Connecting to %s", sanitize_url(url))
     params = pika.URLParameters(url)
     try:
         connection = pika.BlockingConnection(params)
     except Exception as exc:
-        print(f"Dispatcher failed to connect: {exc}", file=sys.stderr)
+        logging.error(
+            "Dispatcher failed to connect (%s). Check RABBITMQ_URL and broker availability.",
+            type(exc).__name__,
+        )
         raise SystemExit(1)
 
     channel = connection.channel()
@@ -47,20 +69,17 @@ def main() -> None:
         while True:
             counter += 1
             payload = build_payload(counter)
-            if counter % 10 == 0:
-                payload.pop("zone", None)
-                print(f"Publishing invalid message #{counter}: {json.dumps(payload)}")
-            else:
-                print(f"Publishing valid message #{counter}: {json.dumps(payload)}")
-            routing_key = f"{payload.get('city', 'unknown')}.{payload.get('zone', 'unknown')}.{payload.get('type', 'unknown')}"
+            logging.info("Publishing message %s %s", counter, json.dumps(payload, separators=(",", ":")))
+            routing_key = build_routing_key(payload)
             channel.basic_publish(
                 exchange=EXCHANGE,
                 routing_key=routing_key,
                 body=json.dumps(payload),
+                properties=pika.BasicProperties(content_type="application/json"),
             )
             time.sleep(2)
     except KeyboardInterrupt:
-        print("Stopping dispatcher.")
+        logging.info("Stopping dispatcher.")
     finally:
         connection.close()
 
