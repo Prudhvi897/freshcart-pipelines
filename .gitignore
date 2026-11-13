@@ -1,0 +1,15 @@
+.env
+*.pkl
+*.csv
+mage.log
+**/__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+*.pyc
+*.pyo
+*.log
+.mypy_cache/
+.venv/
+venv/
+.DS_Store
+__MACOSX/
