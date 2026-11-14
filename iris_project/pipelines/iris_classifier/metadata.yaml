@@ -1,4 +1,4 @@
-﻿blocks:
+blocks:
 - all_upstream_blocks_executed: true
   downstream_blocks:
   - validate_data
@@ -40,13 +40,23 @@
   uuid: train_model
 
 - all_upstream_blocks_executed: true
-  downstream_blocks: []
+  downstream_blocks:
+  - summarize_evaluation
   name: evaluate_model
   status: not_executed
   type: transformer
   upstream_blocks:
   - train_model
   uuid: evaluate_model
+
+- all_upstream_blocks_executed: true
+  downstream_blocks: []
+  name: summarize_evaluation
+  status: not_executed
+  type: transformer
+  upstream_blocks:
+  - evaluate_model
+  uuid: summarize_evaluation
 
 - all_upstream_blocks_executed: true
   downstream_blocks: []
