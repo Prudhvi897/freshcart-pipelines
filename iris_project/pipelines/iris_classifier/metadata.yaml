@@ -1,13 +1,63 @@
-blocks:
-  - block_type: data_loader
-    block_name: load_iris
-    downstream_blocks: [prepare_data]
-  - block_type: transformer
-    block_name: prepare_data
-    downstream_blocks: [train_model]
-  - block_type: transformer
-    block_name: train_model
-    downstream_blocks: [save_results]
-  - block_type: data_exporter
-    block_name: save_results
-    downstream_blocks: []
+﻿blocks:
+- all_upstream_blocks_executed: true
+  downstream_blocks:
+  - validate_data
+  name: load_iris
+  status: not_executed
+  type: data_loader
+  upstream_blocks: []
+  uuid: load_iris
+
+- all_upstream_blocks_executed: true
+  downstream_blocks:
+  - prepare_data
+  name: validate_data
+  status: not_executed
+  type: transformer
+  upstream_blocks:
+  - load_iris
+  uuid: validate_data
+
+- all_upstream_blocks_executed: true
+  downstream_blocks:
+  - train_model
+  name: prepare_data
+  status: not_executed
+  type: transformer
+  upstream_blocks:
+  - validate_data
+  uuid: prepare_data
+
+- all_upstream_blocks_executed: true
+  downstream_blocks:
+  - evaluate_model
+  - save_results
+  name: train_model
+  status: not_executed
+  type: transformer
+  upstream_blocks:
+  - prepare_data
+  uuid: train_model
+
+- all_upstream_blocks_executed: true
+  downstream_blocks: []
+  name: evaluate_model
+  status: not_executed
+  type: transformer
+  upstream_blocks:
+  - train_model
+  uuid: evaluate_model
+
+- all_upstream_blocks_executed: true
+  downstream_blocks: []
+  name: save_results
+  status: not_executed
+  type: data_exporter
+  upstream_blocks:
+  - train_model
+  uuid: save_results
+
+name: iris_classifier
+type: python
+uuid: iris_classifier
+widgets: []
