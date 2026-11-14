@@ -57,7 +57,7 @@ def train_model_impl(df: pd.DataFrame, max_depth: int = 3) -> Dict[str, Any]:
 @transformer
 def train_model(df: pd.DataFrame, **kwargs) -> Dict[str, Any]:
     runtime_vars = kwargs.get("runtime_vars", {}) or {}
-    max_depth = int(runtime_vars.get("max_depth", 3))
+    max_depth = int(kwargs.get("max_depth", runtime_vars.get("max_depth", 3)))
     return train_model_impl(df, max_depth=max_depth)
 
 

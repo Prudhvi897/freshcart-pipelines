@@ -15,8 +15,8 @@ def save_results(
     output.parent.mkdir(parents=True, exist_ok=True)
     predictions = pd.DataFrame(
         {
-            "actual": training_result["y_true"].to_numpy(),
-            "predicted": training_result["y_pred"].to_numpy(),
+            "actual": training_result["y_true"],
+            "predicted": training_result["y_pred"],
         }
     )
     predictions.to_csv(output, index=False)

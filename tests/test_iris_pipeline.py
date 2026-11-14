@@ -34,7 +34,7 @@ def test_train_evaluate_and_save_results(tmp_path):
     assert len(training["y_true"]) == 30
     assert len(training["y_pred"]) == 30
     assert 0.0 <= training["test_accuracy"] <= 1.0
-    assert evaluation["confusion_matrix"].sum() == 30
+    assert sum(sum(row) for row in evaluation["confusion_matrix"]) == 30
     assert set(evaluation["metrics"]) == {
         "accuracy",
         "precision_weighted",
@@ -52,3 +52,4 @@ def test_train_model_rejects_invalid_max_depth():
     df = transform(load_iris_frame())
     with pytest.raises(ValueError, match="positive integer"):
         train_model(df, max_depth=0)
+
