@@ -1,0 +1,10 @@
+{
+  "accuracy": 0.9666666667,
+  "performance": "excellent",
+  "class_count": 3,
+  "confusion_matrix": [
+    [7, 0, 0],
+    [0, 11, 0],
+    [0, 1, 11]
+  ]
+}

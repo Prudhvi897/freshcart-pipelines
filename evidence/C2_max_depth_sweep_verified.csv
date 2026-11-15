@@ -1,0 +1,6 @@
+max_depth,correct,total,accuracy,mage_tests,test_accuracy_range_check
+1,29,30,96.67%,6/6 passed,PASS
+2,29,30,96.67%,6/6 passed,PASS
+3,29,30,96.67%,6/6 passed,PASS
+4,29,30,96.67%,6/6 passed,PASS
+5,29,30,96.67%,6/6 passed,PASS

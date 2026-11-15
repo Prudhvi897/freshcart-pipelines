@@ -1,0 +1,43 @@
+﻿RABBITMQ CONSUMER ROUTING EVIDENCE
+Date: 14 November 2026
+Exchange: rapido-dispatch (topic)
+
+1. Ravi
+Pattern: bangalore.koramangala.*
+Observed:
+ORD-0004, ORD-0005 - bangalore.koramangala.ride
+ORD-0026, ORD-0027 - bangalore.koramangala.food
+
+2. Priya
+Pattern: bangalore.indiranagar.*
+Observed:
+ORD-0003, ORD-0011, ORD-0019 - bangalore.indiranagar.ride
+ORD-0017, ORD-0048, ORD-0052 - bangalore.indiranagar.food
+
+3. Arjun
+Pattern: bangalore.*.ride
+Observed:
+Ride messages from indiranagar, koramangala, whitefield and unknown zones.
+Examples: ORD-0003, ORD-0004, ORD-0012, ORD-0050.
+
+4. Meena
+Pattern: bangalore.*.food
+Observed:
+Food messages from indiranagar, koramangala, whitefield and unknown zones.
+Examples: ORD-0017, ORD-0020, ORD-0026, ORD-0036.
+
+5. Karthik
+Pattern: chennai.tnagar.food
+Observed:
+Chennai T. Nagar food messages.
+Examples: ORD-0001, ORD-0002, ORD-0009.
+
+6. Control
+Pattern: bangalore.#
+Observed:
+Multiple Bangalore ride and food routing keys across zones.
+Examples: ORD-0003, ORD-0017, ORD-0026, ORD-0036.
+
+Conclusion:
+The observed deliveries demonstrate topic-based routing using
+exact, single-word wildcard (*) and multi-word wildcard (#) patterns.

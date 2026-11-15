@@ -1,0 +1,16 @@
+﻿RABBITMQ INVALID-MESSAGE HANDLING
+Date: 14 November 2026
+
+Consumer: Arjun
+Routing pattern: bangalore.*.ride
+Observed output:
+[Arjun] Invalid message: missing zone; NACK without requeue
+
+Consumer: Meena
+Routing pattern: bangalore.*.food
+Observed output:
+[Meena] Invalid message: missing zone; NACK without requeue
+
+Result:
+Messages missing the required zone field were rejected
+using NACK without requeue.

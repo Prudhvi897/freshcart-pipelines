@@ -1,0 +1,14 @@
+Iris evaluation output
+Labels: [0, 1, 2]
+
+Confusion matrix:
+[[7, 0, 0],
+ [0, 11, 0],
+ [0, 1, 11]]
+
+Accuracy: 0.9666666667 (96.67%)
+Weighted precision: 0.9694444444 (96.94%)
+Weighted recall: 0.9666666667 (96.67%)
+Weighted F1: 0.9666666667 (96.67%)
+
+Mage evaluation block test: PASSED
